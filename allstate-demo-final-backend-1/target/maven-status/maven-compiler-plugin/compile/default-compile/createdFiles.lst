@@ -1,5 +1,0 @@
-com\registration\registration\controller\registrationController.class
-com\registration\registration\repository\UserRepository.class
-com\registration\registration\RegistrationApplication.class
-com\registration\registration\entity\AllStateUser.class
-com\registration\registration\service\UserService.class
