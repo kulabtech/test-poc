@@ -1,19 +1,19 @@
-const USERS_REST_API_URL = 'http://backend-registration.169.50.202.75.nip.io/user/userslist';
+import axios from "axios";
+import { API_URL } from "./apiEndPoint";
 
-class UserServiceFetch{
-    getUsers(){
-        
-        return fetch(USERS_REST_API_URL,
-            {
-                method: 'get',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            }).then((res => res.json()));
-        
-       
-    }
+class UserServiceFetch {
+  getUsers() {
+    const token = JSON.parse(localStorage.getItem("login"));
+    return axios({
+      url: `${API_URL}/fetchAllUsers`,
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token.token}`,
+      },
+    }).then((res) => res?.data);
+  }
 }
 
 export default new UserServiceFetch();

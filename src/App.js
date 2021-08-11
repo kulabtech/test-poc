@@ -8,11 +8,8 @@ import SignUp from './components/pages/signup';
 import SignIn from './components/pages/signin';
 import ForgotPassword from './components/pages/forgotpassword';
 import UserList from './components/userlist';
-
+import { postAPI } from './services/commonService';
 function App() {
-
-
-
   const [details, setDetails] = useState({ username: "", password: "", store: null });
   const [log, setLog] = useState(false);
   useEffect(() => {
@@ -26,47 +23,40 @@ function App() {
 
   }, [log])
 
-  function login(user) {
-
+  async function  login(user) {
     setDetails(user);
+    const request={ emailID: user.username, password:user.password}
+    const url = `login`;
+    const result=await postAPI(url, request);
+    console.log("result",result);
 
-    const request={ username: user.username, password:user.password}
-
-    console.warn("Formdata", user)
-    fetch('http://backend-login-jwt.169.50.202.75.nip.io/authenticate', {
-      method: "POST",
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(request)
-    }).then((resp) => {
-      resp.json().then((result) => {
+      // axios({
+      //   url: `${API_URL}/authenticate`,
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   data: JSON.stringify(request),
+      // }).then((result) => {
+        const {data}=result
         console.warn(result)
-
-
-        if (result.jwt != null) {
+        if (data.jwt != null) {
           localStorage.setItem('login', JSON.stringify({
             login: true,
-            token: result.jwt,
-            role: result.authority[0].authority
-            
+            token: data.jwt,
+            role: data.authority[0].authority
           }
           ))
-
-
           setLog(true)
           console.log("Login jwt set to " + log)
         }
         else{
           alert("Wrong credentials")
         }
-
         console.warn("Formdata login update", details)
-      })
-
-
-
-    })
-
+      // })
   }
+
   function gLogin(flag){
     if(flag==true)
     {

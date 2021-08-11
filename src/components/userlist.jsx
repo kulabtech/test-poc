@@ -18,6 +18,7 @@ export default class UserList extends React.Component {
     componentDidMount() {
         UserServiceFetch.getUsers()
           .then((res) => {
+              console.log("res",res);
               this.setState({ users: res })
           });
 
