@@ -17,6 +17,7 @@ import SignIn from "./components/pages/signin";
 import ForgotPassword from "./components/pages/forgotpassword";
 import UserList from "./components/userlist";
 import { postAPI } from "./services/commonService";
+import { history } from './helpers';
 function App(props) {
   const [details, setDetails] = useState({
     username: "",
@@ -82,7 +83,7 @@ function App(props) {
 
   return (
     <div>
-      <Router>
+      <Router history={history}>
         {/* <div className="App">
           <div className="auth-wrapper">
             <div className="auth-inner"> */}
