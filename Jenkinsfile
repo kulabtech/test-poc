@@ -52,7 +52,7 @@ pipeline {
            {
              steps 
              {
-               pushToCloudFoundry cloudSpace: 'allstatepoc', credentialsId: 'CF_CREDS', organization: 'testing', selfSigned: 'true', target: 'https://api.169.50.202.75.nip.io',  pluginTimeout: '600'
+               pushToCloudFoundry cloudSpace: 'allstatepoc', credentialsId: 'CF_CREDS', organization: 'testing', selfSigned: 'true', target: 'https://api.169.50.202.75.nip.io',  pluginTimeout: '1200'
              }
            }
     }
