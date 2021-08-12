@@ -1,0 +1,9 @@
+---
+applications:
+- name: backend-jwt
+  instances: 1
+  memory: 1G
+  buildpack: java_buildpack
+  path: target/app-0.0.1-SNAPSHOT.jar
+  random-route: false
+  
