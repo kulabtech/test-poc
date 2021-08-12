@@ -1,7 +1,7 @@
 import './App.css';
 import NavBar from './components/navbar'
 import SideBar from './components/sidebar'
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link, Redirect, HashRouter } from "react-router-dom";
 import React, { useState,useEffect } from 'react';
 import Homepage from './components/pages/homepage';
 import SignUp from './components/pages/signup';
@@ -87,12 +87,14 @@ function App() {
     <div className="App">
       <div className="auth-wrapper">
         <div className="auth-inner">
+        <HashRouter basename="/"> 
           <Switch>
             <Route exact path='/' exact component={() =><SignIn Login={login} GLogin={gLogin} />} />
             <Route path="/sign-in" exact component={() =><SignIn Login={login} GLogin={gLogin} />}/>
             <Route path="/sign-up" exact component={SignUp} />
             <Route path="/forgot-password" exact component={ForgotPassword} />
           </Switch>
+          </HashRouter>
         </div>
       </div>
     </div></Router>
