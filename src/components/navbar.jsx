@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import logo from '../assets/logo.jpg';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, withRouter } from 'react-router-dom';
 import './navbar.css';
 
 class NavBar extends Component {
@@ -12,11 +12,14 @@ class NavBar extends Component {
 
       handleLogout=e=>{
         this.props.Logout();
-            
+        this.props.history.push('/') 
       }
-
     render() {
         let store = JSON.parse(localStorage.getItem('login'));
+        console.log("store",store);
+        if(store===null){
+            this.props.history.push('/')
+        }
         return (
             <React.Fragment>
                 <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -36,11 +39,9 @@ class NavBar extends Component {
                             <li className="nav-item">
                                 <Link className="nav-link" to="/">EA Commercial Resources</Link>
                             </li>
-                            
-                            {
-                            console.warn("store",store)}
+                        
                            {
-                            (store.role==="ROLE_ADMIN")?
+                            (store?.role==="ROLE_ADMIN")?
                             <div>
                                 {/* admin component */}
                             
@@ -69,4 +70,4 @@ class NavBar extends Component {
     }
 }
 
-export default NavBar;
+export default withRouter(NavBar);

@@ -6,11 +6,13 @@ import "./homepage.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import CommonFile from "./commonfile";
 //import logo from '../assets/logo.jpg';
 // import logo from '../assets/logo.jpg';
 function Homepage() {
   return (
     <>
+    <CommonFile>
       <div className="container">
         <div id="asg">Internal Announcements</div>
         <div id="b">Ask ABIe</div>
@@ -108,6 +110,7 @@ function Homepage() {
           </div>
         </div>
       </div>
+      </CommonFile>
     </>
   );
 }
