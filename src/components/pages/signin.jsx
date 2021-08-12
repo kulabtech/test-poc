@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import GoogleLogin from "react-google-login";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
-export default class SignIn extends Component {
+class SignIn extends Component {
   constructor(props) {
     super(props);
 
@@ -31,6 +31,10 @@ export default class SignIn extends Component {
   componentDidMount(){
     const BASE_URL = process.env.REACT_APP_BASE_API_URL;
     console.log(BASE_URL);
+    console.log("log",this.props);
+    if(this.props.log){
+      this.props.history.push('/dashboard')
+    }
   }
 
   render() {
@@ -104,3 +108,5 @@ export default class SignIn extends Component {
     );
   }
 }
+
+export default withRouter(SignIn)
