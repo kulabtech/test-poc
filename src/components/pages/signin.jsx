@@ -32,10 +32,11 @@ class SignIn extends Component {
     console.log(response.profileObj.username);
   }
   componentDidMount() {
+    const tokenvalid=JSON.parse(localStorage.getItem('login'))
     const BASE_URL = process.env.REACT_APP_BASE_API_URL;
     console.log(BASE_URL);
     console.log("log", this.props);
-    if (this.props.log) {
+    if (tokenvalid?.login||this.props.log) {
       this.props.history.push("/dashboard");
     }
   }
