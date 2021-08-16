@@ -32,6 +32,7 @@ class SignIn extends Component {
     console.log(response.profileObj.username);
   }
   componentDidMount() {
+    console.log("local",JSON.parse(localStorage.getItem('login')));
     const tokenvalid=JSON.parse(localStorage.getItem('login'))
     const BASE_URL = process.env.REACT_APP_BASE_API_URL;
     console.log(BASE_URL);
