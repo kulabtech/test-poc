@@ -1,6 +1,9 @@
+import { Field, Form, Formik } from "formik";
 import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { postAPI } from "../../services/commonService";
+import { Input } from "./commonInput";
+import * as Yup from "yup";
 
 export default class SignUp extends Component {
   constructor(props) {
@@ -19,18 +22,10 @@ export default class SignUp extends Component {
     this.handleRegistrationSubmit = this.handleRegistrationSubmit.bind(this);
   }
   async handleRegistrationSubmit(e) {
-    e.preventDefault();
-    if (this.state.password === this.state.cpassword) {
-      const url = `signUp`;
-      const data = this.state;
-      const response = await postAPI(url, data);
-      if (response) {
-        this.setState({ redirect: "/" });
-      }
-    } else {
-      e.preventDefault();
-      alert("Passwords did not match! Please retry!");
-      this.setState({ password: "", cpassword: "" });
+    const url = `signUp`;
+    const response = await postAPI(url, e);
+    if (response) {
+      this.setState({ redirect: "/" });
     }
   }
 
@@ -38,112 +33,134 @@ export default class SignUp extends Component {
     if (this.state.redirect) {
       return <Redirect to={this.state.redirect} />;
     }
+    let initialValues = {
+      firstName: "",
+      lastName: "",
+      emailId: "",
+      password: "",
+      cpassword: "",
+      role: "",
+    };
+    let validate = Yup.object().shape({
+      firstName: Yup.string().required("Please enter your full name"),
+      lastName: Yup.string().required("Please enter your full name"),
+      emailId: Yup.string()
+        .email("Please enter a valid emailId")
+        .required("Please enter a valid emailId"),
+      password: Yup.string().required("Please Enter your password"),
+      cpassword: Yup.string()
+        .required("Confirm password is required")
+        .oneOf([Yup.ref("password"), null], "Passwords do not match"),
+      role: Yup.string().required("Select any role"),
+    });
+
     return (
       <div className="App">
         <div className="auth-wrapper">
           <div className="auth-inner">
             <div>
-              <form onSubmit={(e) => this.handleRegistrationSubmit(e)}>
-                <h3>Sign Up</h3>
+              <h3>Sign Up</h3>
 
-                <div className="form-group">
-                  <label>First name</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="fname"
-                    autoComplete="true"
-                    placeholder="First name"
-                    onChange={(e) =>
-                      this.setState({ firstName: e.target.value })
-                    }
-                    value={this.state.firstName}
-                  />
-                </div>
+              <Formik
+                initialValues={initialValues}
+                validationSchema={validate}
+                onSubmit={(values, actions) => {
+                  this.handleRegistrationSubmit(values, actions);
+                }}
+              >
+                {(props) => {
+                  const { setFieldValue } = props;
+                  return (
+                    <Form onSubmit={props.handleSubmit} className="formdiv">
+                      <Input
+                        name="firstName"
+                        id="firstName"
+                        placeholder="John"
+                        label="Enter Firstname"
+                        value={props.values.firstName}
+                      />
+                      <Input
+                        name="lastName"
+                        id="lastName"
+                        placeholder="Doe"
+                        label="Enter Lastname"
+                        value={props.values.lastName}
+                      />
+                      <Input
+                        name="emailId"
+                        id="emailId"
+                        placeholder="example@emailId.com"
+                        label="Enter Email address"
+                        value={props.values.emailId}
+                      />
+                      <Input
+                        type="password"
+                        name="password"
+                        id="password"
+                        placeholder="******"
+                        label="Enter Password"
+                        value={props.values.password}
+                      />
+                      <Input
+                        type="password"
+                        name="cpassword"
+                        id="cpassword"
+                        placeholder="******"
+                        label="Enter Confirm Password"
+                        value={props.values.cpassword}
+                      />
+                      <Field name={"role"}>
+                        {({
+                          field: { name, value, onChange, onBlur },
+                          form: { touched, errors },
+                          meta,
+                        }) => (
+                          <div>
+                            <div className="form-group">
+                              <div className="dd-header">
+                                <div className="dd-header-title">Role</div>
+                              </div>
+                              <div>
+                                <button
+                                  type="button"
+                                  className="btn btn-light btn-outline-secondary  mr-2"
+                                  onClick={() => {
+                                    setFieldValue("role", "admin");
+                                  }}
+                                >
+                                  Admin
+                                </button>
+                                <button
+                                  type="button"
+                                  className="btn btn-light btn-outline-secondary  mr-2"
+                                  onClick={() => {
+                                    setFieldValue("role", "user");
+                                  }}
+                                >
+                                  User
+                                </button>
+                              </div>
+                            </div>
+                            {meta.touched && meta.error && (
+                              <p style={{ color: "red" }}>{meta.error}</p>
+                            )}
+                          </div>
+                        )}
+                      </Field>
 
-                <div className="form-group">
-                  <label>Last name</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="lname"
-                    autoComplete="true"
-                    placeholder="Last name"
-                    onChange={(e) =>
-                      this.setState({ lastName: e.target.value })
-                    }
-                    value={this.state.lastName}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Email address</label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    name="email"
-                    autoComplete="true"
-                    placeholder="Enter email"
-                    onChange={(e) => {
-                      this.setState({ emailId: e.target.value });
-                    }}
-                    value={this.state.emailId}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Password</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    placeholder="Enter password"
-                    onChange={(e) =>
-                      this.setState({ password: e.target.value })
-                    }
-                    value={this.state.password}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Confirm Password</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    placeholder="Confirm password"
-                    onChange={(e) =>
-                      this.setState({ cpassword: e.target.value })
-                    }
-                    value={this.state.cpassword}
-                  />
-                </div>
-                <div className="form-group">
-                  <div className="dd-header">
-                    <div className="dd-header-title">Role</div>
-                  </div>
-                  <div>
-                    <button
-                      type="button"
-                      className="btn btn-light btn-outline-secondary  mr-2"
-                      onClick={() => this.setState({ role: "admin" })}
-                    >
-                      Admin
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-light btn-outline-secondary  mr-2"
-                      onClick={() => this.setState({ role: "user" })}
-                    >
-                      User
-                    </button>
-                  </div>
-                </div>
-
-                <button type="submit" className="btn btn-primary btn-block">
-                  Sign Up
-                </button>
-                <div className="forgot-password text-right">
-                  Already registered <Link to="/"> sign in?</Link>
-                </div>
-              </form>
+                      <button
+                        type="submit"
+                        className="btn btn-primary btn-block"
+                      >
+                        Sign In
+                      </button>
+                      <div className="forgot-password text-right">
+                        Already registered <Link to="/"> sign in?</Link>
+                      </div>
+                    </Form>
+                  );
+                }}
+              </Formik>
             </div>
           </div>
         </div>
