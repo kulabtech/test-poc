@@ -65,6 +65,7 @@ export const Input = ({
             }}
           />
           <ErrorMessage
+          data-testid={'validation-error'}
             name={name || ""}
             style={{ color: "red" }}
             component="div"
